@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>A-2 포인트 급수 기록</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: #0033cc;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    select, input[type="number"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #0033cc;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0022aa;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+      color: green;
+    }
+
+    #status.error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>A-2 / 포인트 1번</h2>
+
+  <form id="recordForm">
+    <label for="name">입력자:</label>
+    <select id="name" name="name" required>
+      <option value="">-- 선택하세요 --</option>
+      <option value="이문엽">이문엽</option>
+      <option value="김명규">김명규</option>
+    </select>
+
+    <label for="liter">급수량(Liter):</label>
+    <input type="number" id="liter" name="liter" step="0.01" required>
+
+    <label for="password">비밀번호 (4자리):</label>
+    <input type="password" id="password" name="password" maxlength="4" required>
+
+    <button type="submit">제출</button>
+  </form>
+
+  <div id="status"></div>
+
+  <script>
+    const form = document.getElementById('recordForm');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const password = document.getElementById('password').value;
+
+      if (password !== "3006") {
+        status.innerText = "❌ 비밀번호가 틀렸습니다.";
+        status.classList.add("error");
+        return;
+      }
+
+      const scriptURL = "https://script.google.com/macros/s/AKfycbydysdLFkfNKyuYi_tQ6lsqR9mss_9QQ3nonwFbQyztgXBkrLj4mzPkVDTw49vv3HTC/exec";
+      const formData = new FormData(form);
+
+      fetch(scriptURL, { method: 'POST', body: formData })
+        .then(() => {
+          status.innerText = "✅ 기록이 정상적으로 저장되었습니다.";
+          status.classList.remove("error");
+          form.reset();
+        })
+        .catch((error) => {
+          status.innerText = "⚠️ 오류가 발생했습니다. 다시 시도해주세요.";
+          status.classList.add("error");
+          console.error("Error!", error.message);
+        });
+    });
+  </script>
+
+</body>
+</html>
